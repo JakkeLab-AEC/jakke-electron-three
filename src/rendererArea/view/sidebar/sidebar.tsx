@@ -18,7 +18,6 @@ export const Sidebar = () => {
 
     const {
         currentHomeId,
-        mode,
         updateSidebarHeight
     } = useHomeStore();
 

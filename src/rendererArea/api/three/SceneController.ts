@@ -140,6 +140,7 @@ export class SceneController {
         if(currentCameraType == 'PerspectiveCamera') {
             const perspectiveCamera = this.camera as THREE.PerspectiveCamera;
             perspectiveCamera.aspect = width / height;
+            perspectiveCamera.up = new THREE.Vector3(0, 0, 1);
             perspectiveCamera.updateProjectionMatrix();
         } else if (currentCameraType == 'OrthographicCamera') {
             const orthographicCamera = this.camera as THREE.OrthographicCamera;
@@ -150,6 +151,7 @@ export class SceneController {
             orthographicCamera.right = frustumSize * aspect / 2;
             orthographicCamera.top = frustumSize / 2;
             orthographicCamera.bottom = -frustumSize / 2;
+            orthographicCamera.up = new THREE.Vector3(0, 0, 1);
             orthographicCamera.updateProjectionMatrix();
         } else {
             return;
@@ -160,6 +162,7 @@ export class SceneController {
 
     public addGridHelper() {
         const gridHelper = new THREE.GridHelper();
+        gridHelper.rotation.x = Math.PI/2;
         this.gridHelper = gridHelper;
         this.scene.add(gridHelper);
         this.render();
@@ -210,11 +213,17 @@ export class SceneController {
             0.1, 10000
         );
         
+        targetCamera.up.set(0, 0, 1);
+
         targetCamera.position.set(50, 50, 50);
         targetCamera.zoom = 100;
         targetCamera.updateProjectionMatrix();
         targetCamera.lookAt(new THREE.Vector3(0, 0, 0));
-        targetScene.add(new THREE.AxesHelper());
+
+        const axis = new THREE.AxesHelper();
+        axis.rotation.x = Math.PI/2;
+        targetScene.add(axis);
+        
     
         //Default Control and camera
         const controls = new OrbitControls(targetCamera, renderer.domElement);
