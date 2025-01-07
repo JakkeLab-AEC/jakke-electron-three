@@ -221,7 +221,6 @@ export class SceneController {
         targetCamera.lookAt(new THREE.Vector3(0, 0, 0));
 
         const axis = new THREE.AxesHelper();
-        // axis.rotation.x = Math.PI/2;
         targetScene.add(axis);
         
     

@@ -18,6 +18,7 @@ export default defineConfig({
         'mock-aws-s3',
         'aws-sdk',
         'nock',
+        '@mapbox',
         ...builtinModules,
       ],
       output: {
@@ -43,4 +44,7 @@ export default defineConfig({
     minifySyntax: false,  // Don't modify syntax for optimization
     minifyWhitespace: false,  // Preserve whitespace and formatting
   },
+  optimizeDeps: {
+    exclude: ["@mapbox"],
+  }
 });
