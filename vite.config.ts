@@ -6,6 +6,7 @@ export default defineConfig({
   base: './',
   build: {
     outDir: '.vite/',
+    minify: false,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'src/main.ts'),  // main.ts 파일
@@ -14,10 +15,11 @@ export default defineConfig({
       },
       external: [
         'electron',
+        ...builtinModules,
       ],
       output: {
         entryFileNames: '[name].js',
-        format: 'cjs',
+        format: 'es',
       },
     },
   },
@@ -28,5 +30,14 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
     },
+  },
+  json: {
+    stringify: true,
+  },
+  esbuild: {
+    keepNames: true,  // Preserve original function and class names
+    minifyIdentifiers: false,  // Don't minify variable names
+    minifySyntax: false,  // Don't modify syntax for optimization
+    minifyWhitespace: false,  // Preserve whitespace and formatting
   },
 });

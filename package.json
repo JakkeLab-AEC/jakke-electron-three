@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsc && concurrently \"vite\" \"wait-on tcp:3000 && electron-forge start\"",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "tsc && vite build && electron-forge make",
     "publish": "tsc && vite build && electron-forge publish",
     "rebuild": "electron-forge import && npm rebuild sqlite3 --build-from-source --sqlite_libname=sqlcipher --sqlite=C:/path/to/sqlcipher --runtime=electron --target=33.0.2 --dist-url=https://electronjs.org/headers",
     "start": "electron-forge start"

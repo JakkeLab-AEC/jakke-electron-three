@@ -21,7 +21,7 @@ export async function openDB() {
             // db.run("PRAGMA cipher_compatibility = 3");
 
             db.run("PRAGMA key = 'mysecret'");
-            db.run("CREATE TABLE lorem (info TEXT)");
+            db.run("CREATE TABLE IF NOT EXISTS lorem (info TEXT)");
 
             var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
             for (var i = 0; i < 10; i++) {
@@ -42,7 +42,7 @@ export async function openDB() {
 }
 
 async function initializeDB(db: Database) {
-    await db.run(`
+    db.run(`
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL
