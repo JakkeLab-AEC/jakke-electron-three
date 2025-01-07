@@ -1,16 +1,8 @@
-import sqlite3, { Database } from 'sqlite3';
+import {Database} from '@journeyapps/sqlcipher';
 import { app } from "electron";
 import path from "path";
 import fs from "fs";
 
-function dbRun(db: Database, query: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      db.run(query, (err) => {
-            if (err) reject(err);
-            else resolve();
-        });
-    });
-}
 
 export async function openDB() {
     const userDataPath = app.getPath('userData');
@@ -21,22 +13,26 @@ export async function openDB() {
     fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 
     try {
-        const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
-            if (err) {
-                console.error('Failed to open database:', err.message);
-                throw err;
+        const db = new Database(dbPath)
+        db.serialize(function() {
+            db.run("PRAGMA cipher_compatibility = 4");
+
+            // To open a database created with SQLCipher 3.x, use this:
+            // db.run("PRAGMA cipher_compatibility = 3");
+
+            db.run("PRAGMA key = 'mysecret'");
+            db.run("CREATE TABLE lorem (info TEXT)");
+
+            var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+            for (var i = 0; i < 10; i++) {
+                stmt.run("Ipsum " + i);
             }
+            stmt.finalize();
+
+            db.each("SELECT rowid AS id, info FROM lorem", function(err, row) {
+                console.log(row.id + ": " + row.info);
+            });
         });
-
-        await dbRun(db, 'PRAGMA foreign_keys = OFF');
-        await initializeDB(db);
-
-        const encryptionKey = 'your-secret-password'; // Replace with your desired password
-        await dbRun(db, `PRAGMA key = '${encryptionKey}'`);
-
-        await dbRun(db, 'PRAGMA foreign_keys = ON');
-
-        await initializeDB(db);
 
         return db;
     } catch (error) {

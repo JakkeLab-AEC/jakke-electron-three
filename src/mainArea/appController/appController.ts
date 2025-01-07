@@ -1,4 +1,4 @@
-import { Database } from "sqlite3";
+import { Database } from "@journeyapps/sqlcipher";
 import { openDB } from "./repository/repositoryConfig";
 
 export class AppController {
