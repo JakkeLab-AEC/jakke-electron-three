@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { setIPCElectronTestHandler } from './mainArea/ipcHandler/ipcElectronTestHandler';
 import path from 'path';
 import os from 'os';
+import { AppController } from './mainArea/appController/appController';
 
 if (require('electron-squirrel-startup')) app.quit();
 
@@ -37,6 +38,8 @@ const createWindow = () => {
 
 app.on('ready', () => {
   createWindow();
+
+  AppController.InitiateAppController();
 
   setIPCElectronTestHandler(ipcMain);
 });
