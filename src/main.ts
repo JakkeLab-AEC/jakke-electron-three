@@ -55,3 +55,7 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+app.on('quit', () => {
+  AppController.getInstance().closeAppActions();
+});

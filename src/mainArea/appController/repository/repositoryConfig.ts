@@ -4,7 +4,7 @@ import path from "path";
 import fs from "fs";
 
 
-export async function openDB() {
+export async function openDB():Promise<{db: Database, dbPath: string}> {
     const userDataPath = app.getPath('userData');
     const dbPath = path.join(userDataPath, 'appDB.db');
 
@@ -34,18 +34,9 @@ export async function openDB() {
             });
         });
 
-        return db;
+        return {db: db, dbPath: dbPath};
     } catch (error) {
         console.error('Failed to open database:', error);
         throw error;
     }
-}
-
-async function initializeDB(db: Database) {
-    db.run(`
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL
-        )
-    `)
 }

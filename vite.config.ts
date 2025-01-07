@@ -15,6 +15,9 @@ export default defineConfig({
       },
       external: [
         'electron',
+        'mock-aws-s3',
+        'aws-sdk',
+        'nock',
         ...builtinModules,
       ],
       output: {
